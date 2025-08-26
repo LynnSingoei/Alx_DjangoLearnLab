@@ -31,7 +31,7 @@ class Librarian(models.Model):
 class User(models.Model):
     name=models.CharField(max_length=200)
 
-class Userprofile(models.Model):
+class UserProfile(models.Model):
     ROLES=[
         ('Admin','Admin'),
         ('Librarian','Librarian'),
@@ -43,7 +43,7 @@ class Userprofile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Userprofile.objects.create(user=instance)
-        
+
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
