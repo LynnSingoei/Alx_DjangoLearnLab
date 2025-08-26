@@ -23,18 +23,11 @@ class LibraryDetailView(DetailView):
         return context
     
 
-def register(request):
-    form_class=UserCreationForm
-
-    if request.method=='POST':
-        form=form_class(request.POST)
-        if form.is_valid():
-            user=form.save()
-            login(request,user)
-            
-    else:
-        form=form_class()
-    return render(request,'relationship_app/register.html',{'form':form})
+class RegisterView(CreateView):
+    form_class = UserCreationForm
+    template_name = 'relationship_app/register.html'
+    success_url = reverse_lazy('login')
+    
 
 
 def login_view(request):
