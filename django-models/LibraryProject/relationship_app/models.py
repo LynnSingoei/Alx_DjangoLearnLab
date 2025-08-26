@@ -39,6 +39,7 @@ class UserProfile(models.Model):
     ]
     user=models.OneToOneField(User, on_delete=models.CASCADE, related_name="Profile")
     role=models.CharField(max_length=200, choices=ROLES, default='Member')
+    
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
