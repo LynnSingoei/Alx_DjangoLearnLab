@@ -1,5 +1,8 @@
 from django.shortcuts import HttpResponse
 from .models import Book
+from .models import Library
+from django.shortcuts import render
+from django.views.generic import DetailView
 
 # Create your views here.
 def books_list(request):
