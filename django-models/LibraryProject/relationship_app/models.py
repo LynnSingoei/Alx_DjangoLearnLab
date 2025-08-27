@@ -1,6 +1,7 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.contrib.auth.models import User
 
 
 # Create your models here.
@@ -30,18 +31,20 @@ class Librarian(models.Model):
     def __str__(self):
         return self.name
     
-class User(models.Model):
-    name=models.CharField(max_length=200)
-
 class UserProfile(models.Model):
-    ROLES=[
-        ('Admin','Admin'),
-        ('Librarian','Librarian'),
-        ('Member','Member')
+    ROLES = [
+        ('Admin', 'Admin'),
+        ('Librarian', 'Librarian'),
+        ('Member', 'Member'),
     ]
-    user=models.OneToOneField(User, on_delete=models.CASCADE, related_name="Profile")
-    role=models.CharField(max_length=200, choices=ROLES, default='Member')
-    
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    role = models.CharField(max_length=200, choices=ROLES, default='Member')
+
+    def __str__(self):
+        return f"{self.user.username} - {self.role}"
+
+
+# Create or save profile automatically
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -49,4 +52,4 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.userprofile.save()
+    instance.profile.save()
